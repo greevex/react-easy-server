@@ -116,11 +116,11 @@ class easyServer
         if($this->config['communication'] === null) {
             throw new easyServerException("'communication' section must be specified in easyServer config");
         }
-        if(!is_a($this->config['protocol'], protocolInterface::class)) {
-            throw new easyServerException("'protocol' must implements " . protocolInterface::class);
+        if(!is_a($this->config['protocol'], protocolInterface::class, true)) {
+            throw new easyServerException("'protocol' must implements " . protocolInterface::class . ' but got a ' . gettype($this->config['protocol']));
         }
-        if(!is_a($this->config['communication'], communicationInterface::class)) {
-            throw new easyServerException("'communication' must implements " . communicationInterface::class);
+        if(!is_a($this->config['communication'], communicationInterface::class, true)) {
+            throw new easyServerException("'communication' must implements " . communicationInterface::class . ' but got a ' . gettype($this->config['protocol']));
         }
     }
 
