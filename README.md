@@ -7,3 +7,7 @@ Simple client work, simple describing of any protocol.
 Build your socket server with any protocol and client communication scenario in few lines of code
 
 Example is in examples directory.
+
+```bash
+composer require greevex/react-easy-server
+```
