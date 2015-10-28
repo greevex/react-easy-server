@@ -9,9 +9,11 @@ use Evenement\EventEmitter;
  * Protocol parser/builder abstraction
  *
  * @package greevex\react\easyServer\protocol
+ * @author Gregory Ostrovsky <greevex@gmail.com>
  */
 abstract class abstractProtocol
     extends EventEmitter
+    implements protocolInterface
 {
 
     /**
