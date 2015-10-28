@@ -34,6 +34,7 @@ class gzJsonProtocol
             $result[] = $command;
             // cut parsed bytes from buffer
             $this->buffer = substr($this->buffer, $commandLen + 4);
+            $dataLen = strlen($this->buffer);
         }
 
         return $result;
