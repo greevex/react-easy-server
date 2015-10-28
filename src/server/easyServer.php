@@ -135,4 +135,33 @@ class easyServer
 
         return $this->socketServerInstance;
     }
+
+    /**
+     * @return \greevex\react\easyServer\client[]
+     */
+    public function getClients()
+    {
+        return $this->clients;
+    }
+
+    /**
+     * @return \greevex\react\easyServer\communication\communicationInterface[]
+     */
+    public function getCommunications()
+    {
+        return $this->communications;
+    }
+
+    public function shutdown()
+    {
+        $this->socketServer()->shutdown();
+        foreach($this->communications as $commKey => $communication) {
+            unset($this->communications[$commKey]);
+        }
+        foreach($this->clients as $clientKey => $client) {
+            $client->disconnect();
+            unset($this->clients[$clientKey]);
+        }
+        $this->removeAllListeners();
+    }
 }
