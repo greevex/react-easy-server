@@ -7,9 +7,14 @@ use Evenement\EventEmitter;
 use greevex\react\easyServer\client;
 
 /**
- * Abstract communication scenario
+ * Abstract client communication scenario
  *
  * Class describes structured communication between client and server
+ *
+ * Events:
+ *  connected - client connected, but paused. WARN: Do not resume it here!
+ *  disconnected - client was disconnected, abort all tasks with this client
+ *  command - client command received. WARN: Do not use it event inside object, cuz method clientCommand() exists
  *
  * @package greevex\react\easyServer\communication
  * @author Gregory Ostrovsky <greevex@gmail.com>
@@ -51,14 +56,16 @@ abstract class abstractCommunication
         $this->client = $client;
         $this->id = $client->getId() . self::SCENARIO_ID_POSTFIX;
         $this->client->on('command', function($command) {
+            $this->emit('command', [$command, $this->client]);
             $this->clientCommand($command);
         });
+        $this->prepare();
     }
 
     /**
-     * When new client connected
+     * Prepare on new object initialization
      */
-    abstract protected function connected();
+    abstract protected function prepare();
 
     /**
      * Process new received client command
