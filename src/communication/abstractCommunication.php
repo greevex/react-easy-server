@@ -21,6 +21,7 @@ use greevex\react\easyServer\client;
  */
 abstract class abstractCommunication
     extends EventEmitter
+    implements communicationInterface
 {
     const SCENARIO_ID_POSTFIX = ':scenario';
 
