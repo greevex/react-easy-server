@@ -8,7 +8,7 @@ use greevex\react\easyServer\protocol\gzJsonProtocol;
 use React\EventLoop\StreamSelectLoop;
 use greevex\react\easyServer\server\easyServer;
 
-class ServerTest extends testCase
+class ServerTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
