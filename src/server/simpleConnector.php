@@ -45,7 +45,7 @@ class simpleConnector
     /**
      * @return React\SocketClient\Connector
      */
-    protected function getConnector()
+    public function getConnector()
     {
         if($this->connector === null) {
             $dnsResolverFactory = new React\Dns\Resolver\Factory();
