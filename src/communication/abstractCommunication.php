@@ -56,6 +56,11 @@ abstract class abstractCommunication
     }
 
     /**
+     * When new client connected
+     */
+    abstract protected function connected();
+
+    /**
      * Process new received client command
      *
      * @param $command
