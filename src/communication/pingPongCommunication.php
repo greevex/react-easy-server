@@ -40,10 +40,6 @@ class pingPongCommunication
             case 'ping':
                 $time = microtime(true);
                 $writeLatency = $time - $command['payload']['time'];
-                error_log('[ping] Write latency: ' . ((int)$writeLatency*1000) . 'ms');
-                if(!empty($command['payload']['latency'])) {
-                    error_log('[ping] Received latency: ' . ((int)$command['payload']['latency']*1000) . 'ms');
-                }
                 $this->client->send([
                     'request' => 'pong',
                     'payload' => [
@@ -55,10 +51,6 @@ class pingPongCommunication
             case 'pong':
                 $time = microtime(true);
                 $readLatency = $time - $command['payload']['time'];
-                error_log('[pong] Read latency: ' . ((int)$readLatency*1000) . 'ms');
-                if(!empty($command['payload']['latency'])) {
-                    error_log('[pong] Received latency: ' . ((int)$command['payload']['latency']*1000) . 'ms');
-                }
                 $this->client->send([
                     'request' => 'ping',
                     'payload' => [
