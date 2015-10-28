@@ -1,29 +1,42 @@
 {
-    "name": "greevex/react-easy-server",
-    "description": "ReactPHP easy socket server solution. Simple client work, simple describing of any protocol.",
-    "require": {
-        "react/socket": "^0.4.0@dev",
-        "react/socket-client": "^0.4.0@dev"
-    },
-    "require-dev": {
-        "react/socket": "^0.4.0@dev",
-        "react/socket-client": "^0.4.0@dev",
-        "phpunit/phpunit": "^4.0@dev"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Gregory Ostrovsky",
-            "email": "greevex@gmail.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {
-        "php": ">=5.3.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "greevex\\react\\easyServer\\": "src/"
-        }
+  "name": "greevex/react-easy-server",
+  "description": "Very easy and powerful socket server solution with describing of any protocol and client scenario. Based on ReactPHP/socket",
+  "keywords": [
+    "socket",
+    "server",
+    "protocol",
+    "client",
+    "react",
+    "async"
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "react/socket": "^0.4.0@dev",
+    "react/socket-client": "^0.4.0@dev"
+  },
+  "require-dev": {
+    "react/socket": "^0.4.0@dev",
+    "react/socket-client": "^0.4.0@dev",
+    "phpunit/phpunit": "^4.0@dev"
+  },
+  "license": "MIT",
+  "support": {
+    "issues": "https://github.com/greevex/react-easy-server/issues?state=open",
+    "source": "https://github.com/greevex/react-easy-server"
+  },
+  "authors": [
+    {
+      "name": "Gregory Ostrovsky",
+      "email": "greevex@gmail.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=5.3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "greevex\\react\\easyServer\\": "src/"
+    }
+  }
 }
