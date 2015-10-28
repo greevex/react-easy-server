@@ -13,20 +13,20 @@ namespace greevex\react\easyServer\communication;
 class pingPongCommunication
     extends abstractCommunication
 {
-
     /**
-     * When new client connected
+     * Prepare on new object initialization
      */
-    protected function connected()
+    protected function prepare()
     {
-        // Hello new client
-
-        $this->client->send([
-            'request' => 'pong',
-            'payload' => [
-                'time' => microtime(true),
-            ],
-        ]);
+        $this->on('connected', function() {
+            // Hello new client
+            $this->client->send([
+                'request' => 'ping',
+                'payload' => [
+                    'time' => microtime(true),
+                ],
+            ]);
+        });
     }
 
     /**
