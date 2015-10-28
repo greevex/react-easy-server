@@ -32,9 +32,9 @@ class ServerTest extends testCase
         return new StreamSelectLoop();
     }
     /**
-     * @covers React\Socket\Server::__construct
-     * @covers React\Socket\Server::listen
-     * @covers React\Socket\Server::getPort
+     * @covers easyServer::__construct
+     * @covers easyServer::setConfig
+     * @covers easyServer::start
      */
     public function setUp()
     {
@@ -46,8 +46,6 @@ class ServerTest extends testCase
     }
     /**
      * @covers React\EventLoop\StreamSelectLoop::tick
-     * @covers React\Socket\Server::handleConnection
-     * @covers React\Socket\Server::createConnection
      */
     public function testConnection()
     {
@@ -59,11 +57,9 @@ class ServerTest extends testCase
         $this->loop->tick();
         static::assertEquals(1, $called);
     }
+
     /**
-     * @covers easyServer::start
-     * @covers easyServer::getClients
-     * @covers easyServer::getCommunications
-     * @covers easyServer::getCommunications
+     * @covers React\EventLoop\StreamSelectLoop::tick
      */
     public function testConnectionWithManyClients()
     {
@@ -81,7 +77,7 @@ class ServerTest extends testCase
     }
 
     /**
-     * @covers React\Socket\Server::shutdown
+     * @covers easyServer::shutdown
      */
     public function tearDown()
     {
