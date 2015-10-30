@@ -2,7 +2,7 @@
 
 use greevex\react\easyServer\examples\exampleServer;
 
-require_once __DIR__ . '/../../tests/bootstrap.php';
+require_once __DIR__ . '/bootstrap.php';
 
 $clientConfig = [
     'host' => '127.0.0.1',
