@@ -33,8 +33,7 @@
   "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
-      "greevex\\react\\easyServer\\": "src/",
-      "greevex\\react\\easyServer\\examples\\": "examples/"
+      "greevex\\react\\easyServer\\": "src/"
     }
   }
 }
