@@ -31,6 +31,11 @@ abstract class abstractCommunication
     protected $loop;
 
     /**
+     * @var array
+     */
+    protected $config;
+
+    /**
      * @var client
      */
     protected $client;
@@ -50,11 +55,15 @@ abstract class abstractCommunication
     /**
      * @param React\EventLoop\LoopInterface $loop
      * @param client                        $client
+     * @param array                         $config
      */
-    public function __construct(React\EventLoop\LoopInterface $loop, client $client)
+    public function __construct(React\EventLoop\LoopInterface $loop, client $client, array $config = null)
     {
         $this->loop = $loop;
         $this->client = $client;
+        if($config !== null) {
+            $this->config = $config;
+        }
         $this->id = $client->getId() . self::SCENARIO_ID_POSTFIX;
         $this->client->on('command', function($command) {
             $this->emit('command', [$command, $this->client]);
