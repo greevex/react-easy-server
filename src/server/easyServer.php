@@ -82,7 +82,8 @@ class easyServer
             $this->clients[$clientId] = $newClient;
             /** @var communicationInterface $communication */
             $communicationClass = $this->config['communication'];
-            $communication = new $communicationClass($this->loop, $newClient, $this->config['inner']);
+            $innerConfig = isset($this->config['inner']) ? $this->config['inner'] : null;
+            $communication = new $communicationClass($this->loop, $newClient, $innerConfig);
             $this->communications[$communication->getId()] = $communication;
             $newClient->on('close', function() use ($newClient, $communication) {
                 $communication->emit('disconnected');
