@@ -74,7 +74,10 @@ class easyServer
     public function start()
     {
         $this->emit('starting', [$this]);
+
         $socketServer = $this->socketServer("{$this->config['host']}:{$this->config['port']}");
+        $socketServer->pause();
+
         $socketServer->on('connection', function(React\Socket\Connection $clientConnection) {
             $clientConnection->pause();
             $newClient = new client($clientConnection->stream, $this->loop, new $this->config['protocol']);
@@ -93,6 +96,8 @@ class easyServer
             $this->emit('connection', [$newClient, $communication]);
             $communication->emit('connected');
         });
+
+        $socketServer->resume();
         $this->emit('started', [$this]);
     }
 
