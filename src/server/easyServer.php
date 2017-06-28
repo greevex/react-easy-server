@@ -75,7 +75,7 @@ class easyServer
     {
         $this->emit('starting', [$this]);
 
-        $socketServer = $this->socketServer("{$this->config['host']}:{$this->config['port']}");
+        $socketServer = $this->socketServer();
         $socketServer->pause();
 
         $socketServer->on('connection', function(React\Socket\Connection $clientConnection) {
@@ -133,10 +133,10 @@ class easyServer
     /**
      * @return React\Socket\Server
      */
-    protected function socketServer($uri)
+    protected function socketServer()
     {
         if($this->socketServerInstance === null) {
-            $this->socketServerInstance = new React\Socket\Server($uri, $this->loop);
+            $this->socketServerInstance = new React\Socket\Server("{$this->config['host']}:{$this->config['port']}", $this->loop);
         }
 
         return $this->socketServerInstance;
@@ -160,7 +160,7 @@ class easyServer
 
     public function shutdown()
     {
-        $this->socketServer("{$this->config['host']}:{$this->config['port']}")->close();
+        $this->socketServer()->close();
         foreach($this->communications as $commKey => $communication) {
             unset($this->communications[$commKey]);
         }
