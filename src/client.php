@@ -50,6 +50,7 @@ class client
     public function __construct($socket, React\EventLoop\LoopInterface $loop, protocolInterface $protocol)
     {
         $this->clientConnection = new React\Socket\Connection($socket, $loop);
+        $this->clientConnection->pause();
         $this->loop = $loop;
         $this->protocol = $protocol;
 
@@ -72,6 +73,7 @@ class client
             $this->protocol->removeAllListeners();
             $this->removeAllListeners();
         });
+        $this->clientConnection->resume();
     }
 
     /**

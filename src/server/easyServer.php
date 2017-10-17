@@ -79,7 +79,9 @@ class easyServer
 
         $socketServer = $this->socketServer();
 
+        $socketServer->pause();
         $socketServer->on('connection', [$this, 'newClientConnection']);
+        $socketServer->resume();
 
         $this->emit('started', [$this]);
     }
@@ -89,7 +91,10 @@ class easyServer
      */
     public function newClientConnection(React\Socket\Connection $clientConnection)
     {
+        $clientConnection->pause();
         $newClient = new client($clientConnection->stream, $this->loop, new $this->config['protocol']);
+        $newClient->pause();
+
         $clientId = $newClient->getId();
         $this->clients[$clientId] = $newClient;
 
@@ -102,12 +107,14 @@ class easyServer
 
         $newClient->on('close', function(client $client) use ($communication) {
             $communication->emit('disconnected');
-            unset($this->communications[$communication->getId()], $this->clients[$client->getId()]);
+
             $communication->removeAllListeners();
-            unset($this->clients[$client->getId()]);
+            unset($this->communications[$communication->getId()]);
             $client->removeAllListeners();
+            unset($this->clients[$client->getId()]);
         });
 
+        $newClient->resume();
         $this->emit('connection', [$newClient, $communication]);
         $communication->emit('connected');
     }
