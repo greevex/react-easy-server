@@ -2,6 +2,7 @@
 
 namespace greevex\react\easyServer\server;
 
+use greevex\react\easyServer\communication\abstractCommunication;
 use React;
 use Evenement\EventEmitter;
 use greevex\react\easyServer\client;
@@ -69,36 +70,46 @@ class easyServer
     /**
      * Start server
      *
-     * @throws React\Socket\ConnectionException
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     public function start()
     {
         $this->emit('starting', [$this]);
 
         $socketServer = $this->socketServer();
-        $socketServer->pause();
 
-        $socketServer->on('connection', function(React\Socket\Connection $clientConnection) {
-            $clientConnection->pause();
-            $newClient = new client($clientConnection->stream, $this->loop, new $this->config['protocol']);
-            $clientId = $newClient->getId();
-            $this->clients[$clientId] = $newClient;
-            /** @var communicationInterface $communication */
-            $communicationClass = $this->config['communication'];
-            $innerConfig = isset($this->config['inner']) ? $this->config['inner'] : null;
-            $communication = new $communicationClass($this->loop, $newClient, $innerConfig);
-            $this->communications[$communication->getId()] = $communication;
-            $newClient->on('close', function() use ($newClient, $communication) {
-                $communication->emit('disconnected');
-                unset($this->communications[$communication->getId()], $this->clients[$newClient->getId()]);
-            });
-            $newClient->resume();
-            $this->emit('connection', [$newClient, $communication]);
-            $communication->emit('connected');
+        $socketServer->on('connection', [$this, 'newClientConnection']);
+
+        $this->emit('started', [$this]);
+    }
+
+    /**
+     * @param React\Socket\Connection $clientConnection
+     */
+    public function newClientConnection(React\Socket\Connection $clientConnection)
+    {
+        $newClient = new client($clientConnection->stream, $this->loop, new $this->config['protocol']);
+        $clientId = $newClient->getId();
+        $this->clients[$clientId] = $newClient;
+
+        /** @var communicationInterface $communication */
+        $communicationClass = $this->config['communication'];
+        $innerConfig = isset($this->config['inner']) ? $this->config['inner'] : null;
+
+        $communication = new $communicationClass($this->loop, $newClient, $innerConfig);
+        $this->communications[$communication->getId()] = $communication;
+
+        $newClient->on('close', function(client $client) use ($communication) {
+            $communication->emit('disconnected');
+            unset($this->communications[$communication->getId()], $this->clients[$client->getId()]);
+            $communication->removeAllListeners();
+            unset($this->clients[$client->getId()]);
+            $client->removeAllListeners();
         });
 
-        $socketServer->resume();
-        $this->emit('started', [$this]);
+        $this->emit('connection', [$newClient, $communication]);
+        $communication->emit('connected');
     }
 
     /**
@@ -132,6 +143,8 @@ class easyServer
 
     /**
      * @return React\Socket\Server
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      */
     protected function socketServer()
     {
@@ -162,6 +175,7 @@ class easyServer
     {
         $this->socketServer()->close();
         foreach($this->communications as $commKey => $communication) {
+            $communication->removeAllListeners();
             unset($this->communications[$commKey]);
         }
         foreach($this->clients as $clientKey => $client) {

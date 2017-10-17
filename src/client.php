@@ -68,6 +68,9 @@ class client
         });
         $this->clientConnection->on('close', function() {
             $this->emit('close', [$this]);
+            $this->clientConnection->removeAllListeners();
+            $this->protocol->removeAllListeners();
+            $this->removeAllListeners();
         });
     }
 
