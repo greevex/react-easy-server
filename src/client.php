@@ -2,6 +2,7 @@
 
 namespace greevex\react\easyServer;
 
+use greevex\react\easyServer\server\easyServerException;
 use React;
 use Evenement\EventEmitter;
 use greevex\react\easyServer\protocol\protocolInterface;
@@ -43,13 +44,21 @@ class client
     /**
      * Initialize new client object wrapped by specified protocol
      *
-     * @param resource $socket Stream socket resource of connection
-     * @param React\EventLoop\LoopInterface $loop
-     * @param protocolInterface             $protocol
+     * @param React\Socket\Connection|resource $socket Stream socket resource of connection
+     * @param React\EventLoop\LoopInterface    $loop
+     * @param protocolInterface                $protocol
+     *
+     * @throws \greevex\react\easyServer\server\easyServerException
      */
     public function __construct($socket, React\EventLoop\LoopInterface $loop, protocolInterface $protocol)
     {
-        $this->clientConnection = new React\Socket\Connection($socket, $loop);
+        if(is_resource($socket)) {
+            $this->clientConnection = new React\Socket\Connection($socket, $loop);
+        } elseif(is_a($socket, React\Socket\Connection::class)) {
+            $this->clientConnection = $socket;
+        } else {
+            throw new easyServerException('Invalid connection: ' . gettype($socket) . ' given. Allowed types: resource, ' . React\Socket\Connection::class . '.');
+        }
         $this->clientConnection->pause();
         $this->loop = $loop;
         $this->protocol = $protocol;

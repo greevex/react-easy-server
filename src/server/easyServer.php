@@ -88,11 +88,13 @@ class easyServer
 
     /**
      * @param React\Socket\Connection $clientConnection
+     *
+     * @throws \greevex\react\easyServer\server\easyServerException
      */
     public function newClientConnection(React\Socket\Connection $clientConnection)
     {
         $clientConnection->pause();
-        $newClient = new client($clientConnection->stream, $this->loop, new $this->config['protocol']);
+        $newClient = new client($clientConnection, $this->loop, new $this->config['protocol']);
         $newClient->pause();
 
         $clientId = $newClient->getId();
